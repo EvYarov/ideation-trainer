@@ -52,12 +52,35 @@
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line2);}
 
   /* ---- intro screen ---- */
-  #intro{display:block;}
-  .intro-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
-  .intro-card .src{font-size:14px;color:var(--muted);}
-  ol.steps{margin:6px 0 14px;padding-left:20px;}
-  ol.steps li{margin-bottom:6px;font-size:15px;}
-  .meta{font-size:14px;color:var(--muted);background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;margin-top:8px;}
+  /* ---- onboarding ---- */
+  #intro{display:flex;flex-direction:column;min-height:calc(100vh - 120px);}
+  .ob-top{flex:0 0 auto;display:flex;justify-content:flex-end;min-height:24px;}
+  .skip{background:none;border:none;color:var(--muted);font-size:14px;padding:4px 6px;}
+  .ob-stage{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:8px 0;}
+  .slide{display:none;}
+  .slide.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .slide .num{font-size:13px;color:var(--brand);font-weight:600;letter-spacing:.5px;margin-bottom:10px;}
+  .slide h2{font-size:22px;font-weight:600;margin:0 0 12px;letter-spacing:-.2px;line-height:1.25;}
+  .slide p{font-size:15px;color:var(--muted);margin:0 0 12px;}
+  .visual{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0;}
+  .mini-cards{display:flex;flex-direction:column;gap:8px;}
+  .mini{display:flex;align-items:center;gap:10px;border-radius:var(--radius-sm);padding:9px 11px;border:1px solid;font-size:14px;font-weight:500;}
+  .mini .g{font-size:17px;}
+  .mini.aud{background:var(--aud-bg);color:var(--aud-ink);border-color:var(--aud-line);}
+  .mini.prob{background:var(--prob-bg);color:var(--prob-ink);border-color:var(--prob-line);}
+  .mini.tech{background:var(--tech-bg);color:var(--tech-ink);border-color:var(--tech-line);}
+  .mini.cond{background:var(--cond-bg);color:var(--cond-ink);border-color:var(--cond-line);}
+  .frame{font-size:15px;line-height:1.7;color:var(--ink);}
+  .frame b{color:var(--brand);}
+  .frame .fin{display:block;margin-top:8px;font-style:italic;color:var(--muted);font-size:14px;}
+  .ob-bottom{flex:0 0 auto;}
+  .dots{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--line2);transition:background .2s,width .2s;}
+  .dot.on{background:var(--brand);width:20px;border-radius:4px;}
+  .ob-nav{display:flex;gap:8px;}
+  .ob-nav .back{flex:0 0 auto;background:transparent;border:1px solid var(--line2);color:var(--ink);padding:13px 18px;}
+  .ob-nav .next{flex:1;background:var(--brand);color:#fff;font-weight:600;}
 
   /* ---- game screen ---- */
   #game{display:none;}
@@ -109,30 +132,72 @@
 <body>
 <div class="wrap">
 
-  <!-- ===== INTRO ===== -->
+  <!-- ===== ONBOARDING ===== -->
   <section id="intro">
-    <h1>Генератор продуктовых идей</h1>
-    <p class="lead">Тренажёр на скорость продуктового мышления.</p>
-
-    <div class="intro-card">
-      <p class="src">В основе — метод <b>морфологического ящика</b>, разработанный швейцарским астрофизиком <b>Фрицем Цвикки</b> в 1940-х. Задачу разбивают на независимые параметры, для каждого собирают набор вариантов, а решения ищут в случайных сочетаниях. Здесь четыре параметра — аудитория, проблема, технология, контекст, — и случайная четвёрка карт даёт связку, которую сам бы не выстроил.</p>
+    <div class="ob-top">
+      <button class="skip" id="skipBtn">Пропустить ✕</button>
     </div>
 
-    <p style="font-weight:600;margin-bottom:6px;">Как играть</p>
-    <ol class="steps">
-      <li>Раздайте 4 карты — по одной каждого типа.</li>
-      <li>За 5 минут придумайте продукт, который закрывает проблему этой аудитории — с этой технологией и в этом контексте.</li>
-      <li>Сформулируйте и убедительно презентуйте идею: кому, что, зачем, почему сработает.</li>
-    </ol>
+    <div class="ob-stage">
 
-    <div class="meta">
-      <b style="color:var(--ink)">Что тренируется:</b> насмотренность на связку «аудитория → проблема → решение», работа в жёстких рамках, скорость генерации и питч под таймер.
-      <br><br>
-      Сложные расклады — не баг. Если карты «не клеятся» — это и есть упражнение: натянуть нежизнеспособную связку или честно обосновать, почему она не работает.
+      <!-- slide 1 -->
+      <div class="slide active" data-i="0">
+        <div class="num">КАК ПОЛЬЗОВАТЬСЯ ТРЕНАЖЁРОМ</div>
+        <h2>Четыре карты — одна идея</h2>
+        <p>Тренажёр на скорость продуктового мышления. В основе — метод морфологического ящика (Фриц Цвикки, 1940-е): когда параметры будущего продукта сводят вместе в случайном порядке, рождаются неожиданные сочетания — и придумывать приходится не то, что первым приходит в голову, а то, что подкинули карты.</p>
+        <div class="visual">
+          <div class="mini-cards">
+            <div class="mini aud"><span class="g">👥</span> Аудитория — для кого</div>
+            <div class="mini prob"><span class="g">⚠️</span> Проблема — что болит</div>
+            <div class="mini tech"><span class="g">⚙️</span> Технология — чем решаем</div>
+            <div class="mini cond"><span class="g">🧩</span> Контекст — где и как</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- slide 2 -->
+      <div class="slide" data-i="1">
+        <div class="num">ШАГ 1</div>
+        <h2>Вам выпадают 4 карты</h2>
+        <p>Случайно выпадают 4 карты — и нужно придумать продукт или идею из заданных условий.</p>
+        <p><b style="color:var(--ink)">Карты можно заменить.</b> Тап по карте — она перетасуется. «Раздать новые» — меняет все четыре сразу.</p>
+        <p><b style="color:var(--ink)">Выпала незнакомая технология?</b> Это нормально, так и задумано. Либо тапните по ней и замените, либо трактуйте по названию — точное определение не нужно, важно, как вы её приткнёте к задаче.</p>
+      </div>
+
+      <!-- slide 3 -->
+      <div class="slide" data-i="2">
+        <div class="num">ШАГ 2 · ОПОРА ДЛЯ ПИТЧА</div>
+        <h2>Шаблон идеи</h2>
+        <p>За 5 минут соберите идею по этому шаблону — четыре опоры = четыре карты:</p>
+        <div class="visual">
+          <div class="frame">
+            <b>Для</b> [аудитории] <b>с проблемой</b> [проблема]<br>
+            мы делаем [что за продукт],<br>
+            который <b>с помощью</b> [технология]<br>
+            решает её <b>в контексте</b> [контекст].
+            <span class="fin">И одной фразой — почему это сработает именно здесь.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- slide 4 -->
+      <div class="slide" data-i="3">
+        <div class="num">ШАГ 3</div>
+        <h2>5 минут — и питч</h2>
+        <p>Запустите таймер на 5 минут — это время, чтобы придумать идею по заданному шаблону. Когда время выйдет — проговорите идею вслух (в группе — по очереди; соло — можно набросать тезисы).</p>
+        <p>Кстати, сложные расклады — это не баг. Если карты логично «не клеятся» — это и есть хорошее упражнение для мозга: надо постараться и найти связку для продукта или честно обосновать, почему это тут не работает.</p>
+      </div>
+
     </div>
 
-    <div style="margin-top:18px;">
-      <button class="btn-primary" id="startBtn">Начать</button>
+    <div class="ob-bottom">
+      <div class="dots" id="dots">
+        <span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <div class="ob-nav">
+        <button class="back" id="backBtn" style="display:none;">Назад</button>
+        <button class="next" id="nextBtn">Далее</button>
+      </div>
     </div>
   </section>
 
@@ -140,13 +205,14 @@
   <section id="game">
     <div class="info-bar" id="infoBar">
       <span class="ic">i</span>
-      <span class="tx">Как играть · о методе</span>
+      <span class="tx">Как играть · шаблон питча</span>
       <span class="chev">▾</span>
     </div>
     <div id="infoBody">
-      <b style="color:var(--ink)">Метод морфологического ящика</b> (Фриц Цвикки, 1940-е): случайное сочетание параметров рождает неочевидные связки.<br><br>
-      <b style="color:var(--ink)">Шаги:</b> 1) 4 карты; 2) за 5 минут — продукт под все условия; 3) убедительный питч: кому, что, зачем, почему сработает.<br><br>
-      Тап по карте перетасовывает только её. «Раздать новые» — все четыре сразу.
+      <b style="color:var(--ink)">Шаблон питча:</b><br>
+      <span style="color:var(--brand)">Для</span> [аудитории] <span style="color:var(--brand)">с проблемой</span> [проблема] — мы делаем [продукт], который <span style="color:var(--brand)">с помощью</span> [технология] решает её <span style="color:var(--brand)">в контексте</span> [контекст]. И одной фразой — почему сработает.<br><br>
+      <b style="color:var(--ink)">Незнакомая технология?</b> Тапните по карте — заменится. Или трактуйте по названию: важна не точность, а как приткнёте к задаче.<br><br>
+      <b style="color:var(--ink)">Формат:</b> вслух за оставшееся время (в группе — по очереди), соло — тезисами. Тап по карте меняет только её, «Раздать новые» — все четыре.
     </div>
 
     <div class="cards" id="cards"></div>
@@ -222,12 +288,30 @@
     setTimeout(function(){ cardsEl.style.opacity='1'; }, 130);
   });
 
-  // intro -> game
-  document.getElementById('startBtn').addEventListener('click', function(){
+  // ---- onboarding navigation ----
+  const slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  const dots = Array.prototype.slice.call(document.querySelectorAll('#dots .dot'));
+  const nextBtn = document.getElementById('nextBtn');
+  const backBtn = document.getElementById('backBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  let idx = 0;
+  function showSlide(i){
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
+    backBtn.style.display = i===0 ? 'none' : 'block';
+    nextBtn.textContent = i===slides.length-1 ? 'Начать' : 'Далее';
+    idx = i;
+  }
+  function startGame(){
     document.getElementById('intro').style.display = 'none';
     document.getElementById('game').style.display = 'block';
     window.scrollTo(0,0);
+  }
+  nextBtn.addEventListener('click', function(){
+    if(idx < slides.length-1) showSlide(idx+1); else startGame();
   });
+  backBtn.addEventListener('click', function(){ if(idx>0) showSlide(idx-1); });
+  skipBtn.addEventListener('click', startGame);
 
   // info toggle
   const infoBar = document.getElementById('infoBar');
