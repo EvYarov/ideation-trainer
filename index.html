@@ -56,9 +56,9 @@
   #intro{display:flex;flex-direction:column;min-height:calc(100vh - 120px);}
   .ob-top{flex:0 0 auto;display:flex;justify-content:flex-end;min-height:24px;}
   .skip{background:none;border:none;color:var(--muted);font-size:14px;padding:4px 6px;}
-  .ob-stage{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:8px 0;}
+  .ob-stage{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:8px 0;overflow-y:auto;}
   .slide{display:none;}
-  .slide.active{display:block;animation:fade .25s ease;}
+  .slide.active{display:block;margin:auto 0;animation:fade .25s ease;}
   @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
   .slide .num{font-size:13px;color:var(--brand);font-weight:600;letter-spacing:.5px;margin-bottom:10px;}
   .slide h2{font-size:22px;font-weight:600;margin:0 0 12px;letter-spacing:-.2px;line-height:1.25;}
@@ -74,6 +74,14 @@
   .frame{font-size:15px;line-height:1.7;color:var(--ink);}
   .frame b{color:var(--brand);}
   .frame .fin{display:block;margin-top:8px;font-style:italic;color:var(--muted);font-size:14px;}
+  .example{margin-top:14px;background:var(--bg);border-radius:var(--radius-sm);padding:13px 14px;}
+  .example .extag{font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--brand);text-transform:uppercase;margin-bottom:8px;}
+  .example .drew{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.6;}
+  .example .drew b{color:var(--ink);}
+  .example .sentence{font-size:14px;line-height:1.6;color:var(--ink);}
+  .example .sentence b{color:var(--ink);}
+  .example .sentence em{font-style:italic;color:var(--brand);font-weight:600;}
+  .example .note{display:block;margin-top:9px;font-size:12.5px;color:var(--muted);line-height:1.5;}
   .ob-bottom{flex:0 0 auto;}
   .dots{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--line2);transition:background .2s,width .2s;}
@@ -176,6 +184,13 @@
             который <b>с помощью</b> [технология]<br>
             решает её <b>в контексте</b> [контекст].
             <span class="fin">И одной фразой — почему это сработает именно здесь.</span>
+          </div>
+        </div>
+        <div class="example">
+          <div class="extag">Пример</div>
+          <div class="drew">Выпало: 👥 <b>пенсионеры</b> · ⚠️ <b>забывчивость (лекарства)</b> · ⚙️ <b>голосовой помощник</b> · 🧩 <b>больница / поликлиника</b></div>
+          <div class="sentence">Для <b>пенсионеров</b> с проблемой <b>«забывают принять лекарства»</b> мы делаем <em>голосовую колонку-напоминалку</em>, которая с помощью <b>голосового помощника</b> называет препарат и время вслух, в контексте <b>поликлиники</b>: расписание загружает врач на приёме.
+          <span class="note">Жирным — то, что задали карты. Придумать за 5 минут нужно одно: <em style="font-style:italic;">продукт в середине</em> и как он связывает все четыре карты.</span>
           </div>
         </div>
       </div>
