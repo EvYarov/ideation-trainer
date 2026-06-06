@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f6e56">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Генератор продуктовых идей</title>
+<style>
+  :root{
+    --bg:#f4f3ee; --surface:#ffffff; --ink:#1f1e1a; --muted:#6b6a63;
+    --line:rgba(0,0,0,0.10); --line2:rgba(0,0,0,0.16);
+    --brand:#0f6e56; --brand-soft:#e1f5ee;
+    --danger:#a32d2d;
+    --aud-bg:#e6f1fb; --aud-ink:#0c447c; --aud-line:#185fa5;
+    --prob-bg:#faece7; --prob-ink:#712b13; --prob-line:#993c1d;
+    --tech-bg:#eeedfe; --tech-ink:#3c3489; --tech-line:#534ab7;
+    --cond-bg:#e1f5ee; --cond-ink:#085041; --cond-line:#0f6e56;
+    --radius:14px; --radius-sm:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#1a1a18; --surface:#262521; --ink:#f1efe8; --muted:#a8a69d;
+      --line:rgba(255,255,255,0.12); --line2:rgba(255,255,255,0.20);
+      --brand:#5dcaa5; --brand-soft:#0f6e56;
+      --danger:#f09595;
+      --aud-bg:#0c447c; --aud-ink:#b5d4f4; --aud-line:#85b7eb;
+      --prob-bg:#712b13; --prob-ink:#f5c4b3; --prob-line:#f0997b;
+      --tech-bg:#3c3489; --tech-ink:#cecbf6; --tech-line:#afa9ec;
+      --cond-bg:#085041; --cond-ink:#9fe1cb; --cond-line:#5dcaa5;
+    }
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px;}
+  h1{font-size:24px;font-weight:600;margin:0 0 4px;letter-spacing:-0.2px;}
+  p{margin:0 0 12px;}
+  .lead{color:var(--muted);font-size:15px;}
+  button{
+    font-family:inherit;font-size:16px;cursor:pointer;border:none;
+    border-radius:var(--radius-sm);padding:13px 16px;transition:transform .08s,background .15s;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{background:var(--brand);color:#fff;font-weight:600;width:100%;}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line2);}
+
+  /* ---- intro screen ---- */
+  #intro{display:block;}
+  .intro-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+  .intro-card .src{font-size:14px;color:var(--muted);}
+  ol.steps{margin:6px 0 14px;padding-left:20px;}
+  ol.steps li{margin-bottom:6px;font-size:15px;}
+  .meta{font-size:14px;color:var(--muted);background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;margin-top:8px;}
+
+  /* ---- game screen ---- */
+  #game{display:none;}
+  .info-bar{
+    display:flex;align-items:center;gap:10px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:10px 12px;margin-bottom:14px;cursor:pointer;
+  }
+  .info-bar .ic{flex:0 0 auto;color:var(--brand);font-weight:700;font-size:15px;
+    width:22px;height:22px;border:1.5px solid var(--brand);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;}
+  .info-bar .tx{flex:1;font-size:14px;color:var(--muted);}
+  .info-bar .chev{flex:0 0 auto;color:var(--muted);font-size:13px;transition:transform .2s;}
+  .info-bar.open .chev{transform:rotate(180deg);}
+  #infoBody{display:none;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px;margin:-6px 0 14px;font-size:14px;color:var(--muted);}
+  #infoBody.show{display:block;}
+
+  .cards{display:flex;flex-direction:column;gap:11px;margin-bottom:16px;}
+  .card{
+    border-radius:var(--radius);padding:14px 15px;display:flex;align-items:center;gap:13px;
+    border:1px solid;cursor:pointer;transition:transform .09s;user-select:none;
+  }
+  .card .glyph{flex:0 0 40px;height:40px;border-radius:var(--radius-sm);
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.07);font-size:20px;}
+  @media (prefers-color-scheme: dark){.card .glyph{background:rgba(255,255,255,0.12);}}
+  .card .body{flex:1;min-width:0;}
+  .card .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.7px;opacity:.8;margin-bottom:2px;}
+  .card .val{font-size:17px;font-weight:600;line-height:1.25;}
+  .card .reshuf{flex:0 0 auto;font-size:16px;opacity:.5;}
+  .card.aud{background:var(--aud-bg);color:var(--aud-ink);border-color:var(--aud-line);}
+  .card.prob{background:var(--prob-bg);color:var(--prob-ink);border-color:var(--prob-line);}
+  .card.tech{background:var(--tech-bg);color:var(--tech-ink);border-color:var(--tech-line);}
+  .card.cond{background:var(--cond-bg);color:var(--cond-ink);border-color:var(--cond-line);}
+
+  .btn-deal{background:var(--surface);color:var(--ink);border:1px solid var(--line2);width:100%;font-weight:600;margin-bottom:18px;}
+
+  .timer{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;}
+  .time{font-size:46px;font-weight:600;text-align:center;font-variant-numeric:tabular-nums;
+    letter-spacing:1px;margin-bottom:12px;line-height:1;}
+  .time.danger{color:var(--danger);}
+  .timer-ctl{display:flex;gap:8px;}
+  .timer-ctl .start{flex:1;background:var(--brand);color:#fff;font-weight:600;}
+  .timer-ctl .rst{flex:0 0 54px;background:transparent;border:1px solid var(--line2);color:var(--ink);font-size:18px;padding:0;}
+  .hint{font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.5;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== INTRO ===== -->
+  <section id="intro">
+    <h1>Генератор продуктовых идей</h1>
+    <p class="lead">Тренажёр на скорость продуктового мышления.</p>
+
+    <div class="intro-card">
+      <p class="src">В основе — метод <b>морфологического ящика</b>, разработанный швейцарским астрофизиком <b>Фрицем Цвикки</b> в 1940-х. Задачу разбивают на независимые параметры, для каждого собирают набор вариантов, а решения ищут в случайных сочетаниях. Здесь четыре параметра — аудитория, проблема, технология, условие, — и случайная четвёрка карт даёт связку, которую сам бы не выстроил.</p>
+    </div>
+
+    <p style="font-weight:600;margin-bottom:6px;">Как играть</p>
+    <ol class="steps">
+      <li>Раздайте 4 карты — по одной каждого типа.</li>
+      <li>За 5 минут придумайте продукт, который закрывает проблему этой аудитории — с этой технологией и в этих условиях.</li>
+      <li>Сформулируйте и убедительно презентуйте идею: кому, что, зачем, почему сработает.</li>
+    </ol>
+
+    <div class="meta">
+      <b style="color:var(--ink)">Что тренируется:</b> насмотренность на связку «аудитория → проблема → решение», работа в жёстких рамках, скорость генерации и питч под таймер.
+      <br><br>
+      Сложные расклады — не баг. Если карты «не клеятся» — это и есть упражнение: натянуть нежизнеспособную связку или честно обосновать, почему она не работает.
+    </div>
+
+    <div style="margin-top:18px;">
+      <button class="btn-primary" id="startBtn">Начать</button>
+    </div>
+  </section>
+
+  <!-- ===== GAME ===== -->
+  <section id="game">
+    <div class="info-bar" id="infoBar">
+      <span class="ic">i</span>
+      <span class="tx">Как играть · о методе</span>
+      <span class="chev">▾</span>
+    </div>
+    <div id="infoBody">
+      <b style="color:var(--ink)">Метод морфологического ящика</b> (Фриц Цвикки, 1940-е): случайное сочетание параметров рождает неочевидные связки.<br><br>
+      <b style="color:var(--ink)">Шаги:</b> 1) 4 карты; 2) за 5 минут — продукт под все условия; 3) убедительный питч: кому, что, зачем, почему сработает.<br><br>
+      Тап по карте перетасовывает только её. «Раздать новые» — все четыре сразу.
+    </div>
+
+    <div class="cards" id="cards"></div>
+
+    <button class="btn-deal" id="dealBtn">↻ Раздать новые 4 карты</button>
+
+    <div class="timer">
+      <div class="time" id="time">5:00</div>
+      <div class="timer-ctl">
+        <button class="start" id="startPause">▶ Старт</button>
+        <button class="rst" id="reset" aria-label="Сбросить">↺</button>
+      </div>
+    </div>
+
+    <p class="hint">Тап по карте — перетасовать только её.</p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const DECKS = [
+    { key:'aud', cls:'aud', label:'Аудитория', glyph:'👥',
+      items:['Студенты','Школьники старших классов','Молодые родители','Пенсионеры','Автомобилисты','Фрилансеры','Удалёнщики','Малый бизнес / самозанятые','Врачи','Медсёстры','Учителя','Спортсмены-любители','Профессиональные атлеты','Худеющие','Люди с хроническими заболеваниями','Путешественники','Дальнобойщики','Курьеры','Официанты','Фермеры','Геймеры','Музыканты','Художники-фрилансеры','Инвесторы-новички','Мигранты / экспаты','Люди с инвалидностью','Слабовидящие','Заводские рабочие','IT-разработчики','HR-специалисты','Продавцы розницы','Домохозяйки','Владельцы домашних животных','Дачники','Абитуриенты'] },
+    { key:'prob', cls:'prob', label:'Проблема', glyph:'⚠️',
+      items:['Нехватка времени','Финансовые затруднения','Усталость на работе (выгорание)','Жажда новых ощущений','Прокрастинация','Одиночество','Информационная перегрузка','Бессонница','Потеря мотивации','Страх публичных выступлений','Языковой барьер','Сложность с принятием решений','Переедание','Гиподинамия (мало движения)','Тревожность','Забывчивость (дела, лекарства)','Конфликты в команде','Перегрузка уведомлениями','Дорогая аренда','Очереди и ожидание','Потеря вещей','Сложность с бюджетом','Изоляция (нет общения по интересам)','Трудности с обучением новому','Низкая концентрация','Переработки','Страх ошибки','Неумение делегировать','Дорогая логистика','Нехватка квалифицированных кадров','Простой оборудования','Высокий процент возвратов','Медленное согласование документов','Утечка данных','Сезонные спады спроса','Сложная локализация','Низкая вовлечённость клиентов','Дефицит обратной связи'] },
+    { key:'tech', cls:'tech', label:'Технология', glyph:'⚙️',
+      items:['Мобильное приложение','Push-уведомления','QR-коды','Геолокация','NFC','Чат-бот','Видеосвязь','Облачное хранилище','Рекомендательные алгоритмы','Штрихкоды','Онлайн-платежи','Электронная очередь','Голосовой помощник','Биометрия (отпечаток / лицо)','Компьютерное зрение','Дополненная реальность (AR)','Виртуальная реальность (VR)','Носимые устройства (трекеры)','IoT-датчики','RFID-метки','Машинное обучение','Геймификация','Краудсорсинг','LLM / генеративный ИИ','ИИ-агенты (автономные)','Мультимодальные модели','Цифровые двойники','Микроботы / дроны','Блокчейн / смарт-контракты','Edge-вычисления','Нейроинтерфейсы (BCI)','Синтез / клонирование голоса','Генерация видео','Предиктивная аналитика','Федеративное обучение','Спутниковый интернет'] },
+    { key:'cond', cls:'cond', label:'Условие', glyph:'🧩',
+      items:['Вендинговый аппарат','Гостиница','Только мобильное приложение','Общественный транспорт','Аэропорт','Торговый центр','Склад','Больница / поликлиника','Школа / вуз','Фитнес-зал','Ресторан / кафе','Коворкинг','Домашняя кухня','Автомобиль','Дача / загородный дом','Парк','Музей','Банковское отделение','Аптека','Заправка (АЗС)','Пункт выдачи заказов','Офис open space','Распределённая команда','Без доступа в интернет (офлайн)','Только голос (без экрана)','Бюджет до 1000 ₽','Работает на старом смартфоне','Для людей 65+','Для детей до 7 лет','На улице / в полевых условиях','В условиях шума','Без рук (hands-free)','Одноразовое использование','Подписочная модель','B2B-контекст','Премиум-сегмент'] }
+  ];
+
+  const current = {};
+  function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function draw(deck){
+    let v;
+    do { v = rnd(deck.items); } while (v === current[deck.key] && deck.items.length > 1);
+    current[deck.key] = v;
+    return v;
+  }
+
+  // build cards
+  const cardsEl = document.getElementById('cards');
+  DECKS.forEach(function(deck){
+    const card = document.createElement('div');
+    card.className = 'card ' + deck.cls;
+    card.setAttribute('role','button');
+    card.setAttribute('tabindex','0');
+    card.innerHTML =
+      '<div class="glyph">'+deck.glyph+'</div>'+
+      '<div class="body"><div class="lbl">'+deck.label+'</div><div class="val"></div></div>'+
+      '<div class="reshuf">↻</div>';
+    const valEl = card.querySelector('.val');
+    valEl.textContent = draw(deck);
+    deck._val = valEl;
+    function reshuffle(){
+      valEl.textContent = draw(deck);
+      card.style.transform = 'scale(0.98)';
+      setTimeout(function(){ card.style.transform=''; }, 90);
+    }
+    card.addEventListener('click', reshuffle);
+    card.addEventListener('keydown', function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reshuffle(); }
+    });
+    cardsEl.appendChild(card);
+  });
+
+  document.getElementById('dealBtn').addEventListener('click', function(){
+    DECKS.forEach(function(d){ d._val.textContent = draw(d); });
+    cardsEl.style.opacity = '0.4';
+    setTimeout(function(){ cardsEl.style.opacity='1'; }, 130);
+  });
+
+  // intro -> game
+  document.getElementById('startBtn').addEventListener('click', function(){
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    window.scrollTo(0,0);
+  });
+
+  // info toggle
+  const infoBar = document.getElementById('infoBar');
+  const infoBody = document.getElementById('infoBody');
+  infoBar.addEventListener('click', function(){
+    infoBar.classList.toggle('open');
+    infoBody.classList.toggle('show');
+  });
+
+  // timer
+  const TOTAL = 300;
+  let left = TOTAL, running = false, tid = null;
+  const timeEl = document.getElementById('time');
+  const spBtn = document.getElementById('startPause');
+  function render(){
+    const m = Math.floor(left/60), s = left%60;
+    timeEl.textContent = m + ':' + String(s).padStart(2,'0');
+    timeEl.classList.toggle('danger', left<=30 && left>0);
+  }
+  function tick(){
+    left--; render();
+    if(left<=0){
+      clearInterval(tid); running=false;
+      spBtn.textContent = '▶ Старт';
+      timeEl.textContent = 'Время!';
+      timeEl.classList.remove('danger');
+      if(navigator.vibrate){ navigator.vibrate([200,100,200]); }
+    }
+  }
+  spBtn.addEventListener('click', function(){
+    if(running){
+      clearInterval(tid); running=false; spBtn.textContent='▶ Продолжить';
+    } else {
+      if(left<=0) left=TOTAL;
+      running=true; spBtn.textContent='⏸ Пауза';
+      tid=setInterval(tick,1000); render();
+    }
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    clearInterval(tid); running=false; left=TOTAL;
+    spBtn.textContent='▶ Старт'; render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
