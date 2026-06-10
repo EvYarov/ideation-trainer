@@ -95,14 +95,17 @@
   .info-bar{
     display:flex;align-items:center;gap:10px;background:var(--surface);
     border:1px solid var(--line);border-radius:var(--radius-sm);
-    padding:10px 12px;margin-bottom:14px;cursor:pointer;
+    padding:11px 12px;margin-bottom:14px;cursor:pointer;
   }
   .info-bar .ic{flex:0 0 auto;color:var(--brand);font-weight:700;font-size:15px;
     width:22px;height:22px;border:1.5px solid var(--brand);border-radius:50%;
     display:flex;align-items:center;justify-content:center;}
   .info-bar .tx{flex:1;font-size:14px;color:var(--muted);}
-  .info-bar .chev{flex:0 0 auto;color:var(--muted);font-size:13px;transition:transform .2s;}
-  .info-bar.open .chev{transform:rotate(180deg);}
+  .info-bar .chev{flex:0 0 auto;color:var(--ink);font-size:20px;font-weight:700;line-height:1;padding-bottom:3px;
+    width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+    transition:transform .25s;animation:nudge 2s ease-in-out 1s 3;}
+  .info-bar.open .chev{transform:rotate(180deg);animation:none;}
+  @keyframes nudge{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
   #infoBody{display:none;background:var(--surface);border:1px solid var(--line);
     border-radius:var(--radius);padding:16px;margin:-6px 0 14px;font-size:14px;color:var(--muted);}
   #infoBody.show{display:block;}
@@ -152,7 +155,7 @@
       <div class="slide active" data-i="0">
         <div class="num">КАК ПОЛЬЗОВАТЬСЯ ТРЕНАЖЁРОМ</div>
         <h2>Четыре карты — одна идея</h2>
-        <p>Тренажёр на скорость продуктового мышления. В основе — метод морфологического ящика (Фриц Цвикки, 1940-е): когда параметры будущего продукта сводят вместе в случайном порядке, рождаются неожиданные сочетания — и придумывать приходится не то, что первым приходит в голову, а то, что подкинули карты.</p>
+        <p>Тренажёр на скорость продуктового мышления. Он построен на методе морфологического ящика (Фриц Цвикки, 1940-е): идею собирают не с нуля, а из случайно выпавших условий. Это сбивает с привычных решений и заставляет искать там, где сам бы не догадался посмотреть.</p>
         <div class="visual">
           <div class="mini-cards">
             <div class="mini aud"><span class="g">👥</span> Аудитория — для кого</div>
@@ -176,7 +179,7 @@
       <div class="slide" data-i="2">
         <div class="num">ШАГ 2 · ОПОРА ДЛЯ ПИТЧА</div>
         <h2>Шаблон идеи</h2>
-        <p>За 5 минут соберите идею по этому шаблону — четыре опоры = четыре карты:</p>
+        <p>За 5 минут соберите идею по этому шаблону — четыре опоры = четыре карты. Говорить строго по нему необязательно: шаблон просто помогает не потеряться и ничего не упустить.</p>
         <div class="visual">
           <div class="frame">
             <b>Для</b> [аудитории] <b>с проблемой</b> [проблема]<br>
@@ -221,7 +224,7 @@
     <div class="info-bar" id="infoBar">
       <span class="ic">i</span>
       <span class="tx">Как играть · шаблон питча</span>
-      <span class="chev">▾</span>
+      <span class="chev">⌄</span>
     </div>
     <div id="infoBody">
       <b style="color:var(--ink)">Шаблон питча:</b><br>
