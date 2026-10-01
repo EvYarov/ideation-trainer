@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f6e56">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -66,7 +66,10 @@
   .visual{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0;}
   .mini-cards{display:flex;flex-direction:column;gap:8px;}
   .mini{display:flex;align-items:center;gap:10px;border-radius:var(--radius-sm);padding:9px 11px;border:1px solid;font-size:14px;font-weight:500;}
-  .mini .g{font-size:17px;}
+  .mini .g{display:inline-flex;align-items:center;}
+  .mini .g svg{width:18px;height:18px;}
+  .drew .gi{display:inline-flex;vertical-align:-3px;}
+  .drew .gi svg{width:15px;height:15px;}
   .mini.aud{background:var(--aud-bg);color:var(--aud-ink);border-color:var(--aud-line);}
   .mini.prob{background:var(--prob-bg);color:var(--prob-ink);border-color:var(--prob-line);}
   .mini.tech{background:var(--tech-bg);color:var(--tech-ink);border-color:var(--tech-line);}
@@ -81,7 +84,7 @@
   .example .sentence{font-size:14px;line-height:1.6;color:var(--ink);}
   .example .sentence b{color:var(--ink);}
   .example .sentence em{font-style:italic;color:var(--brand);font-weight:600;}
-  .example .note{display:block;margin-top:9px;font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .example .note{display:block;margin-top:9px;font-size:13px;color:var(--ink);opacity:.72;line-height:1.55;}
   .ob-bottom{flex:0 0 auto;}
   .dots{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--line2);transition:background .2s,width .2s;}
@@ -106,6 +109,11 @@
     transition:transform .25s;animation:nudge 2s ease-in-out 1s 3;}
   .info-bar.open .chev{transform:rotate(180deg);animation:none;}
   @keyframes nudge{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;}
+    .slide.active{animation:none;}
+    .info-bar .chev{animation:none;}
+  }
   #infoBody{display:none;background:var(--surface);border:1px solid var(--line);
     border-radius:var(--radius);padding:16px;margin:-6px 0 14px;font-size:14px;color:var(--muted);}
   #infoBody.show{display:block;}
@@ -117,12 +125,13 @@
   }
   .card .glyph{flex:0 0 40px;height:40px;border-radius:var(--radius-sm);
     display:flex;align-items:center;justify-content:center;
-    background:rgba(0,0,0,0.07);font-size:20px;}
+    background:rgba(0,0,0,0.07);}
+  .card .glyph svg{width:22px;height:22px;}
   @media (prefers-color-scheme: dark){.card .glyph{background:rgba(255,255,255,0.12);}}
   .card .body{flex:1;min-width:0;}
-  .card .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.7px;opacity:.8;margin-bottom:2px;}
+  .card .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.7px;font-weight:600;margin-bottom:2px;}
   .card .val{font-size:17px;font-weight:600;line-height:1.25;}
-  .card .reshuf{flex:0 0 auto;font-size:16px;opacity:.5;}
+  .card .reshuf{flex:0 0 auto;opacity:.5;display:flex;align-items:center;}
   .card.aud{background:var(--aud-bg);color:var(--aud-ink);border-color:var(--aud-line);}
   .card.prob{background:var(--prob-bg);color:var(--prob-ink);border-color:var(--prob-line);}
   .card.tech{background:var(--tech-bg);color:var(--tech-ink);border-color:var(--tech-line);}
@@ -158,10 +167,10 @@
         <p>Тренажёр на скорость продуктового мышления. Он построен на методе морфологического ящика (Фриц Цвикки, 1940-е): идею собирают не с нуля, а из случайно выпавших условий. Это сбивает с привычных решений и заставляет искать там, где сам бы не догадался посмотреть.</p>
         <div class="visual">
           <div class="mini-cards">
-            <div class="mini aud"><span class="g">👥</span> Аудитория — для кого</div>
-            <div class="mini prob"><span class="g">⚠️</span> Проблема — что болит</div>
-            <div class="mini tech"><span class="g">⚙️</span> Технология — чем решаем</div>
-            <div class="mini cond"><span class="g">🧩</span> Контекст — где и как</div>
+            <div class="mini aud"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Аудитория — для кого</div>
+            <div class="mini prob"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Проблема — что болит</div>
+            <div class="mini tech"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span> Технология — чем решаем</div>
+            <div class="mini cond"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> Контекст — где и как</div>
           </div>
         </div>
       </div>
@@ -191,7 +200,7 @@
         </div>
         <div class="example">
           <div class="extag">Пример</div>
-          <div class="drew">Выпало: 👥 <b>пенсионеры</b> · ⚠️ <b>забывчивость (лекарства)</b> · ⚙️ <b>голосовой помощник</b> · 🧩 <b>больница / поликлиника</b></div>
+          <div class="drew">Выпало: <span class="gi" style="color:var(--aud-line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> <b>пенсионеры</b> · <span class="gi" style="color:var(--prob-line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> <b>забывчивость (лекарства)</b> · <span class="gi" style="color:var(--tech-line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span> <b>голосовой помощник</b> · <span class="gi" style="color:var(--cond-line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> <b>больница / поликлиника</b></div>
           <div class="sentence">Для <b>пенсионеров</b> с проблемой <b>«забывают принять лекарства»</b> мы делаем <em>голосовую колонку-напоминалку</em>, которая с помощью <b>голосового помощника</b> называет препарат и время вслух, в контексте <b>поликлиники</b>: расписание загружает врач на приёме.
           <span class="note">Жирным — то, что задали карты. Придумать за 5 минут нужно одно: <em style="font-style:italic;">продукт в середине</em> и как он связывает все четыре карты.</span>
           </div>
@@ -254,14 +263,22 @@
 (function(){
   "use strict";
 
+  var SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  const ICONS = {
+    aud: SVG+'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    prob: SVG+'<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    tech: SVG+'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+    cond: SVG+'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+  };
+
   const DECKS = [
-    { key:'aud', cls:'aud', label:'Аудитория', glyph:'👥',
+    { key:'aud', cls:'aud', label:'Аудитория', icon:'aud',
       items:['Студенты','Школьники старших классов','Молодые родители','Пенсионеры','Автомобилисты','Фрилансеры','Удалёнщики','Малый бизнес / самозанятые','Врачи','Медсёстры','Учителя','Спортсмены-любители','Профессиональные атлеты','Худеющие','Люди с хроническими заболеваниями','Путешественники','Дальнобойщики','Курьеры','Официанты','Фермеры','Геймеры','Музыканты','Художники-фрилансеры','Инвесторы-новички','Мигранты / экспаты','Люди с инвалидностью','Слабовидящие','Заводские рабочие','IT-разработчики','HR-специалисты','Продавцы розницы','Домохозяйки','Владельцы домашних животных','Дачники','Абитуриенты','Люди 65+','Дети до 7 лет'] },
-    { key:'prob', cls:'prob', label:'Проблема', glyph:'⚠️',
+    { key:'prob', cls:'prob', label:'Проблема', icon:'prob',
       items:['Нехватка времени','Финансовые затруднения','Усталость на работе (выгорание)','Жажда новых ощущений','Прокрастинация','Одиночество','Информационная перегрузка','Бессонница','Потеря мотивации','Страх публичных выступлений','Языковой барьер','Сложность с принятием решений','Переедание','Гиподинамия (мало движения)','Тревожность','Забывчивость (дела, лекарства)','Конфликты в команде','Перегрузка уведомлениями','Дорогая аренда','Очереди и ожидание','Потеря вещей','Сложность с бюджетом','Изоляция (нет общения по интересам)','Трудности с обучением новому','Низкая концентрация','Переработки','Страх ошибки','Неумение делегировать','Дорогая логистика','Нехватка квалифицированных кадров','Простой оборудования','Высокий процент возвратов','Медленное согласование документов','Утечка данных','Сезонные спады спроса','Сложная локализация','Низкая вовлечённость клиентов','Дефицит обратной связи'] },
-    { key:'tech', cls:'tech', label:'Технология', glyph:'⚙️',
+    { key:'tech', cls:'tech', label:'Технология', icon:'tech',
       items:['Мобильное приложение','Push-уведомления','QR-коды','Геолокация','NFC','Чат-бот','Видеосвязь','Облачное хранилище','Рекомендательные алгоритмы','Штрихкоды','Онлайн-платежи','Электронная очередь','Голосовой помощник','Биометрия (отпечаток / лицо)','Компьютерное зрение','Дополненная реальность (AR)','Виртуальная реальность (VR)','Носимые устройства (трекеры)','IoT-датчики','RFID-метки','Машинное обучение','Геймификация','Краудсорсинг','LLM / генеративный ИИ','ИИ-агенты (автономные)','Мультимодальные модели','Цифровые двойники','Микроботы / дроны','Блокчейн / смарт-контракты','Edge-вычисления','Нейроинтерфейсы (BCI)','Синтез / клонирование голоса','Генерация видео','Предиктивная аналитика','Федеративное обучение','Спутниковый интернет'] },
-    { key:'cond', cls:'cond', label:'Контекст', glyph:'🧩',
+    { key:'cond', cls:'cond', label:'Контекст', icon:'cond',
       items:['Вендинговый аппарат','Гостиница','Общественный транспорт','Аэропорт','Торговый центр','Склад','Больница / поликлиника','Школа / вуз','Фитнес-зал','Ресторан / кафе','Коворкинг','Домашняя кухня','Автомобиль','Дача / загородный дом','Парк','Музей','Банковское отделение','Аптека','Заправка (АЗС)','Пункт выдачи заказов','Офис open space','Распределённая команда','Без доступа в интернет (офлайн)','Только голос (без экрана)','Работает на старом смартфоне','На улице / в полевых условиях','В условиях шума','Без рук (hands-free)','Одноразовое использование','Спортивный стадион / арена'] }
   ];
 
@@ -282,9 +299,9 @@
     card.setAttribute('role','button');
     card.setAttribute('tabindex','0');
     card.innerHTML =
-      '<div class="glyph">'+deck.glyph+'</div>'+
+      '<div class="glyph">'+ICONS[deck.icon]+'</div>'+
       '<div class="body"><div class="lbl">'+deck.label+'</div><div class="val"></div></div>'+
-      '<div class="reshuf">↻</div>';
+      '<div class="reshuf"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>';
     const valEl = card.querySelector('.val');
     valEl.textContent = draw(deck);
     deck._val = valEl;
